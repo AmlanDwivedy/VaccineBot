@@ -11,8 +11,8 @@ today_date = now.strftime("%d-%m-%Y")
 odisha_khurda_cuttack_angul_dkl_ids = [446, 457, 445, 458]
 is_for_eighteen_plus = True
 telegram_api_url = "https://api.telegram.org/bot1853183766:AAGzzexG-1c_use4m0G_9IrV0B9Lq53Bkx0/sendMessage?chat_id=@__group_id__&text="
-group_id_forty_five = "odisha_covishild_18_plus"
-group_id_eighteen_plus = "todo"
+telegram_group_id = "odisha_covishild_18_plus"
+last_message = ""
 
 
 def fetch_data_from_cowin(district_id):
@@ -21,7 +21,10 @@ def fetch_data_from_cowin(district_id):
     print(final_url)
     response = requests.get(final_url)
     # print(response.text)
-    extract_availability_data(response)
+    try:
+        extract_availability_data(response)
+    except Exception as e:
+        print(e)
 
 
 def fetch_data_for_me():
@@ -46,6 +49,13 @@ def extract_availability_data(response):
                     if session["vaccine"] != "COVISHIELD":
                         continue
                     message += build_message(center, session)
+    global last_message
+    if last_message != message:
+        print("Last message is not equal to message {}".format(last_message))
+        last_message = message
+    else:
+        print("Last message is  equal to message")
+        return
     # print(message)
     if len(message) > 0:
         message += "\nYou can join the Odisha Covishield 18+ channel https://t.me/odisha_covishild_18_plus. And for feedback use this group https://t.me/OdishaVaccineFeedback".format(
@@ -80,7 +90,7 @@ def build_message(center, session):
 
 
 def send_telegram_message(message):
-    final_telegram_url = telegram_api_url.replace("__group_id__", group_id_forty_five)
+    final_telegram_url = telegram_api_url.replace("__group_id__", telegram_group_id)
     final_telegram_url_with_message = final_telegram_url + message
     response = requests.get(final_telegram_url_with_message)
     print(response.text)
