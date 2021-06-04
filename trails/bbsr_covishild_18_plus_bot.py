@@ -2,8 +2,6 @@ import requests
 from datetime import datetime
 import schedule
 import time
-import schedule
-import time
 
 BASE_COWIN_URL = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict"
 now = datetime.now()
@@ -37,14 +35,14 @@ def extract_availability_data(response):
     response_json = response.json()
     message = ""
     for center in response_json["centers"]:
-        # if center["name"] == "APOLLO HOSPITALS BBSR CVC":
-        #     ss = center["sessions"]
-        #     len(ss)
-        #     print("Center:{}".format(center))
-        #     print("Sessions: {}".format(center["sessions"]))
-        #     for s in ss:
-        #         if is_for_second_dosage and s["min_age_limit"] == 18:
-        #             message += build_message(center, s)
+        if center["name"] == "APOLLO HOSPITALS BBSR CVC":
+            ss = center["sessions"]
+            len(ss)
+            # print("Center:{}".format(center))
+            # print("Sessions: {}".format(center["sessions"]))
+            for s in ss:
+                if is_for_second_dosage and s["min_age_limit"] == 18:
+                    message += build_message(center, s)
         for session in center["sessions"]:
 
             if is_for_eighteen_plus:
@@ -68,7 +66,7 @@ def extract_availability_data(response):
         print("Last message is  equal to message")
         return
     if len(message) > 0:
-        message += "\nYou can join the Odisha Covishield 18+ channel https://t.me/odisha_covishild_18_plus. And for feedback use this group https://t.me/OdishaVaccineFeedback.Share it with more people".format(
+        message += "\nYou can join the Odisha Covishield 18+ channel https://t.me/odisha_covishild_18_plus. And for feedback use this group https://t.me/OdishaVaccineFeedback. Share it with more people".format(
             now.strftime("%H:%m"))
         send_telegram_message(message)
     else:
