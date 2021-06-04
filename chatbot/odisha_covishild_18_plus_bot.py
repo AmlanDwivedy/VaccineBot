@@ -2,6 +2,8 @@ import requests
 from datetime import datetime
 import schedule
 import time
+import schedule
+import time
 
 BASE_COWIN_URL = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict"
 now = datetime.now()
@@ -78,4 +80,8 @@ def send_telegram_message(message):
 
 
 if __name__ == "__main__":
-    fetch_data_for_me()
+    schedule.every(3).seconds.do(lambda: fetch_data_for_me())
+    while True:
+        schedule.run_pending()
+        time.sleep(2)
+

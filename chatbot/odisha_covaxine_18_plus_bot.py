@@ -81,4 +81,7 @@ def send_telegram_message(message):
 
 
 if __name__ == "__main__":
-    fetch_data_for_me()
+    schedule.every(3).seconds.do(lambda: fetch_data_for_me())
+    while True:
+        schedule.run_pending()
+        time.sleep(2)
