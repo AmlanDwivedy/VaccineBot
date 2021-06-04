@@ -39,37 +39,44 @@ def extract_availability_data(response):
                     print(center["center_id"], center["name"])
                     print("Available Dosage {}".format(session["available_capacity_dose1"]) + " For Age {}".format(
                         session["min_age_limit"]))
+                    message += build_message(center, session)
 
             else:
                 if session["min_age_limit"] > 18 & session["available_capacity_dose1"] > 0:
                     if session["vaccine"] != "COVISHIELD":
                         continue
-                    message += "{} ,{} , {} " \
-                               "\nAge: {} " \
-                               "\n{} " \
-                               "\n{}" \
-                               "\nQuantity {} [D1:{} ,D2:{}] \n \n " \
-                               "..............." \
-                               "\n " \
-                        .format(center["name"]
-                                , center["district_name"]
-                                , center["pincode"]
-                                , session["min_age_limit"],
-                                session["vaccine"],
-                                center["fee_type"],
-                                session["available_capacity"],
-                                session[
-                                    "available_capacity_dose1"],
-                                session[
-                                    "available_capacity_dose2"])
+                    message += build_message(center, session)
     # print(message)
     if len(message) > 0:
-        message += "\nYou can join the Odisha Covishield 18+ channel https://t.me/odisha_covishild_18_plus. And for feedback use this group https://t.me/OdishaVaccineFeedback".format(now.strftime("%H:%m"))
+        message += "\nYou can join the Odisha Covishield 18+ channel https://t.me/odisha_covishild_18_plus. And for feedback use this group https://t.me/OdishaVaccineFeedback".format(
+            now.strftime("%H:%m"))
         send_telegram_message(message)
-    # else:
+    else:
+        print("No Slots available at {}".format(datetime.now().strftime("%H:%M")))
     #     send_telegram_message(
     #         "No slots available now. Last checked at {}. You can join the Odisha Covaxine 18+ channel https://t.me/odisha_vovaxine_18_plus".format(
     #             datetime.now().strftime("%H:%m")))
+
+
+def build_message(center, session):
+    return "{} ,{} , {} " \
+           "\nAge: {} " \
+           "\n{} " \
+           "\n{}" \
+           "\nQuantity {} [D1:{} ,D2:{}] \n \n " \
+           "..............." \
+           "\n " \
+        .format(center["name"]
+                , center["district_name"]
+                , center["pincode"]
+                , session["min_age_limit"],
+                session["vaccine"],
+                center["fee_type"],
+                session["available_capacity"],
+                session[
+                    "available_capacity_dose1"],
+                session[
+                    "available_capacity_dose2"])
 
 
 def send_telegram_message(message):
@@ -84,4 +91,3 @@ if __name__ == "__main__":
     while True:
         schedule.run_pending()
         time.sleep(2)
-
