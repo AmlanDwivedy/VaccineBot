@@ -62,11 +62,12 @@ def extract_availability_data(response):
                                     "available_capacity_dose2"])
     # print(message)
     if len(message) > 0:
+        message += "\nYou can join the Odisha Covishield 18+ channel https://t.me/odisha_covishild_18_plus. And for feedback use this group https://t.me/OdishaVaccineFeedback".format(now.strftime("%H:%m"))
         send_telegram_message(message)
-    else:
-        send_telegram_message(
-            "No slots available now. Last checked at {}. You can join the Odisha Covaxine 18+ channel https://t.me/odisha_vovaxine_18_plus".format(
-                now.strftime("%H:%m")))
+    # else:
+    #     send_telegram_message(
+    #         "No slots available now. Last checked at {}. You can join the Odisha Covaxine 18+ channel https://t.me/odisha_vovaxine_18_plus".format(
+    #             datetime.now().strftime("%H:%m")))
 
 
 def send_telegram_message(message):
