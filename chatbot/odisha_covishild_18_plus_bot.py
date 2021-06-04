@@ -38,14 +38,14 @@ def extract_availability_data(response):
     for center in response_json["centers"]:
         for session in center["sessions"]:
             if is_for_eighteen_plus:
-                if session["min_age_limit"] == 18 & session["available_capacity_dose1"] > 0:
+                if session["min_age_limit"] == 18 and session["available_capacity_dose1"] > 0:
                     print(center["center_id"], center["name"])
                     print("Available Dosage {}".format(session["available_capacity_dose1"]) + " For Age {}".format(
                         session["min_age_limit"]))
                     message += build_message(center, session)
 
             else:
-                if session["min_age_limit"] > 18 & session["available_capacity_dose1"] > 0:
+                if session["min_age_limit"] > 18 and session["available_capacity_dose1"] > 0:
                     if session["vaccine"] != "COVISHIELD":
                         continue
                     message += build_message(center, session)
