@@ -61,9 +61,12 @@ def extract_availability_data(response):
                                 session[
                                     "available_capacity_dose2"])
     # print(message)
-    message+= "\n Ignore this.For trial checking 18+"
     if len(message) > 0:
         send_telegram_message(message)
+    else:
+        send_telegram_message(
+            "No slots available now. Last checked at {}. You can join the Odisha Covaxine 18+ channel https://t.me/odisha_vovaxine_18_plus".format(
+                now.strftime("%H:%m")))
 
 
 def send_telegram_message(message):
