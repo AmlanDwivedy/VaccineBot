@@ -33,11 +33,7 @@ def fetch_data_for_me():
 def extract_availability_data(response):
     response_json = response.json()
     message = ""
-    i = 0
     for center in response_json["centers"]:
-        i = i + 1
-        if i > 5:
-            continue
         for session in center["sessions"]:
             if session["vaccine"] != "COVAXIN":
                 continue
@@ -53,7 +49,7 @@ def extract_availability_data(response):
 
     global last_message
     if last_message != message:
-        print("Last message is not equal to message {} at {}".format(last_message,datetime.now().strftime("%H:%M")))
+        print("Last message is not equal to message {} at {}".format(last_message, datetime.now().strftime("%H:%M")))
         last_message = message
     else:
         print("Last message is  equal to message at {}".format(datetime.now().strftime("%H:%M")))
@@ -73,7 +69,7 @@ def build_message(center, session):
            "\nAge: {} " \
            "\n{} " \
            "\n{}" \
-           "\n{}"\
+           "\n{}" \
            "\nQuantity {} [D1:{} ,D2:{}] \n \n " \
            "...." \
            "\n " \
