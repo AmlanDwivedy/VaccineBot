@@ -73,6 +73,7 @@ def build_message(center, session):
            "\nAge: {} " \
            "\n{} " \
            "\n{}" \
+           "\n{} \n"\
            "\nQuantity {} [D1:{} ,D2:{}] \n \n " \
            "..............." \
            "\n " \
@@ -82,6 +83,7 @@ def build_message(center, session):
                 , session["min_age_limit"],
                 session["vaccine"],
                 center["fee_type"],
+                session["date"],
                 session["available_capacity"],
                 session[
                     "available_capacity_dose1"],
@@ -97,7 +99,7 @@ def send_telegram_message(message):
 
 
 if __name__ == "__main__":
-    schedule.every(3).seconds.do(lambda: fetch_data_for_me())
+    schedule.every(5).seconds.do(lambda: fetch_data_for_me())
     while True:
         schedule.run_pending()
-        time.sleep(2)
+        time.sleep(5)
