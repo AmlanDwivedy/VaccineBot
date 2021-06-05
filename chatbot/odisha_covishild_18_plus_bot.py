@@ -11,26 +11,26 @@ is_for_eighteen_plus = True
 telegram_api_url = "https://api.telegram.org/bot1853183766:AAGzzexG-1c_use4m0G_9IrV0B9Lq53Bkx0/sendMessage?chat_id=@__group_id__&parse_mode=HTML&text="
 telegram_group_id = "odisha_covishild_18_plus"
 last_message = ""
+last_send_messages = [None] * len(odisha_khurda_cuttack_angul_dkl_ids)
 
 
-def fetch_data_from_cowin(district_id):
+def fetch_data_from_cowin(district_id, index):
     query_params = "?district_id={}&date={}".format(district_id, today_date)
     final_url = BASE_COWIN_URL + query_params
     print(final_url)
     response = requests.get(final_url)
-    # print(response.text)
     try:
-        extract_availability_data(response)
+        extract_availability_data(response, index)
     except Exception as e:
         print(e)
 
 
 def fetch_data_for_me():
-    for district_id in odisha_khurda_cuttack_angul_dkl_ids:
-        fetch_data_from_cowin(district_id)
+    for index, district_id in enumerate(odisha_khurda_cuttack_angul_dkl_ids):
+        fetch_data_from_cowin(district_id, index)
 
 
-def extract_availability_data(response):
+def extract_availability_data(response, index):
     response_json = response.json()
     message = ""
     for center in response_json["centers"]:
@@ -48,20 +48,22 @@ def extract_availability_data(response):
                 if session["min_age_limit"] > 18 and session["available_capacity_dose1"] > 0:
                     message += build_message(center, session)
     global last_message
+    last_message = last_send_messages[index]
     if last_message != message:
         print("Last message is not equal to message {} at {}".format(last_message, datetime.now().strftime("%H:%M")))
         print("====>last message {}".format(last_message))
         print("====>current message{}".format(message))
-        if len(message) > 0:
-            last_message = message
+        last_message = message
+        last_send_messages[index] = message
     else:
-        print("Last message is  equal to message")
+        print("Last message is  equal to message at {}".format(datetime.now()))
         return
 
     if len(message) > 0:
         send_telegram_message(message)
     else:
         print("No Slots available at {}".format(datetime.now().strftime("%H:%M")))
+
 
 def build_message(center, session):
     vaccine_fee = ""

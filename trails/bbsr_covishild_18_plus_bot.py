@@ -6,32 +6,34 @@ import time
 BASE_COWIN_URL = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict"
 now = datetime.now()
 today_date = now.strftime("%d-%m-%Y")
-odisha_khurda_cuttack_angul_dkl_ids = [446]
+all_odisha_districts = [445, 448, 447, 472, 454, 468, 457, 473, 458, 467, 449, 459, 460, 474, 464, 450, 461, 455, 446,
+                        451, 469, 456, 470, 462, 465, 463, 471, 452, 466, 453]
 is_for_eighteen_plus = False
 is_for_second_dosage = True
 telegram_api_url = "https://api.telegram.org/bot1832543686:AAFgdgcpIOkNeIBWe07jxwVG5uNW1FJX5N4/sendMessage?chat_id=@__group_id__&parse_mode=HTML&text="
 group_id_forty_five = "bbsr_ctc_dkl_angl_covid"
 last_message = ""
+last_send_messages = [None]*len(all_odisha_districts)
 
 
-def fetch_data_from_cowin(district_id):
+def fetch_data_from_cowin(index, district_id):
     query_params = "?district_id={}&date={}".format(district_id, today_date)
     final_url = BASE_COWIN_URL + query_params
     print(final_url)
     response = requests.get(final_url)
     # print(response.text)
     try:
-        extract_availability_data(response)
+        extract_availability_data(response, index)
     except Exception as e:
         print(e)
 
 
 def fetch_data_for_me():
-    for district_id in odisha_khurda_cuttack_angul_dkl_ids:
-        fetch_data_from_cowin(district_id)
+    for index, district_id in enumerate(all_odisha_districts):
+        fetch_data_from_cowin(index, district_id)
 
 
-def extract_availability_data(response):
+def extract_availability_data(response, index):
     response_json = response.json()
     message = ""
     for center in response_json["centers"]:
@@ -59,9 +61,10 @@ def extract_availability_data(response):
                     message += build_message(center, session)
     # print(message)
     global last_message
+    last_message = last_send_messages[index]
     if last_message != message:
         print("Last message is not equal to message {} at {}".format(last_message, datetime.now().strftime("%H:%M")))
-        last_message = message
+        last_send_messages[index] = message
     else:
         print("Last message is  equal to message at {}".format(datetime.now().strftime("%H:%M")))
         return
