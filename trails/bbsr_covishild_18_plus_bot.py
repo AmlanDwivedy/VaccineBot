@@ -66,8 +66,8 @@ def extract_availability_data(response):
         print("Last message is  equal to message")
         return
     if len(message) > 0:
-        message += "\nYou can join the Odisha Covishield 18+ channel https://t.me/odisha_covishild_18_plus. And for feedback use this group https://t.me/OdishaVaccineFeedback. Share it with more people".format(
-            now.strftime("%H:%m"))
+        # message += "\nYou can join the Odisha Covishield 18+ channel https://t.me/odisha_covishild_18_plus. And for feedback use this group https://t.me/OdishaVaccineFeedback. Share it with more people".format(
+        #     now.strftime("%H:%m"))
         send_telegram_message(message)
     else:
         print("No Slots available at {}".format(datetime.now().strftime("%H:%M")))
@@ -77,18 +77,18 @@ def extract_availability_data(response):
 
 
 def build_message(center, session):
-    return "📍<em>{},{},{}</em>📍" \
+    return "📍{} ,{} , {}📍" \
            "\n<strong>Age:{}</strong>" \
            "\n💉💉💉<b>{}</b>" \
            ",<code>{}</code>" \
-           "\n📅<b><u>Date: {}</u></b>" \
-           "\n<strong>Quantity {}<code>[D1:{},D2:{}]</code></strong> \n \n " \
-           "..............." \
-           "\n " \
-        .format(center["name"] + "," + center["address"]
+           "\n📅<b><u>{}</u></b>" \
+           "\n<strong>Quantity {}<code>[D1:{},D2:{}]</code></strong>" \
+           "\n\n" \
+           " %0A" \
+        .format(center["name"]
                 , center["district_name"]
                 , center["pincode"]
-                , session["min_age_limit"],
+                ,str(session["min_age_limit"])+"+",
                 session["vaccine"],
                 center["fee_type"],
                 session["date"],
