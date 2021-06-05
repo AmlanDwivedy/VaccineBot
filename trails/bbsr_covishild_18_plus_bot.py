@@ -6,10 +6,10 @@ import time
 BASE_COWIN_URL = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict"
 now = datetime.now()
 today_date = now.strftime("%d-%m-%Y")
-odisha_khurda_cuttack_angul_dkl_ids = [446]
+odisha_khurda_cuttack_angul_dkl_ids = [471]
 is_for_eighteen_plus = False
 is_for_second_dosage = True
-telegram_api_url = "https://api.telegram.org/bot1832543686:AAFgdgcpIOkNeIBWe07jxwVG5uNW1FJX5N4/sendMessage?chat_id=@__group_id__&text="
+telegram_api_url = "https://api.telegram.org/bot1832543686:AAFgdgcpIOkNeIBWe07jxwVG5uNW1FJX5N4/sendMessage?chat_id=@__group_id__&parse_mode=HTML&text="
 group_id_forty_five = "bbsr_ctc_dkl_angl_covid"
 last_message = ""
 
@@ -77,15 +77,15 @@ def extract_availability_data(response):
 
 
 def build_message(center, session):
-    return "{} ,{} , {} " \
-           "\nAge: {} " \
-           "\n{}  " \
-           "\n{}" \
-            "\nDate: {}"\
-           "\nQuantity {} [D1:{} ,D2:{}] \n \n " \
+    return "📍<em>{},{},{}</em>📍" \
+           "\n<strong>Age:{}</strong>" \
+           "\n💉💉💉<b>{}</b>" \
+           ",<code>{}</code>" \
+           "\n📅<b><u>Date: {}</u></b>" \
+           "\n<strong>Quantity {}<code>[D1:{},D2:{}]</code></strong> \n \n " \
            "..............." \
            "\n " \
-        .format(center["name"]+","+center["address"]
+        .format(center["name"] + "," + center["address"]
                 , center["district_name"]
                 , center["pincode"]
                 , session["min_age_limit"],

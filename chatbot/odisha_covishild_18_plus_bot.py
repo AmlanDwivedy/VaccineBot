@@ -2,15 +2,13 @@ import requests
 from datetime import datetime
 import schedule
 import time
-import schedule
-import time
 
 BASE_COWIN_URL = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict"
 now = datetime.now()
 today_date = now.strftime("%d-%m-%Y")
 odisha_khurda_cuttack_angul_dkl_ids = [446, 457, 445, 458]
 is_for_eighteen_plus = True
-telegram_api_url = "https://api.telegram.org/bot1853183766:AAGzzexG-1c_use4m0G_9IrV0B9Lq53Bkx0/sendMessage?chat_id=@__group_id__&text="
+telegram_api_url = "https://api.telegram.org/bot1853183766:AAGzzexG-1c_use4m0G_9IrV0B9Lq53Bkx0/sendMessage?chat_id=@__group_id__&parse_mode=HTML&text="
 telegram_group_id = "odisha_covishild_18_plus"
 last_message = ""
 
@@ -48,12 +46,14 @@ def extract_availability_data(response):
                     message += build_message(center, session)
             else:
                 if session["min_age_limit"] > 18 and session["available_capacity_dose1"] > 0:
-
                     message += build_message(center, session)
     global last_message
     if last_message != message:
         print("Last message is not equal to message {}".format(last_message))
-        last_message = message
+        print("====>last message {}".format(last_message))
+        print("====>current message{}".format(message))
+        if len(message) > 0:
+            last_message = message
     else:
         print("Last message is  equal to message")
         return
@@ -70,12 +70,12 @@ def extract_availability_data(response):
 
 
 def build_message(center, session):
-    return "{} ,{} , {} " \
-           "\nAge: {} " \
-           "\n{} " \
-           "\n{}" \
-           "\n{} \n"\
-           "\nQuantity {} [D1:{} ,D2:{}] \n \n " \
+    return "📍{} ,{} , {}📍" \
+           "\n<strong>Age: {}</strong>" \
+           "\n💉💉💉<b>{}</b>" \
+           ",<code>{}</code>" \
+           "\n📅<b><u>{}</u></b>" \
+           "\n<strong>Quantity {}<code>[D1:{},D2:{}]</code></strong> \n \n " \
            "..............." \
            "\n " \
         .format(center["name"]

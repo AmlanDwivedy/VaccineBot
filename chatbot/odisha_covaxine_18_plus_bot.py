@@ -8,7 +8,7 @@ now = datetime.now()
 today_date = now.strftime("%d-%m-%Y")
 odisha_khurda_cuttack_angul_dkl_ids = [446, 457, 445, 458]
 is_for_eighteen_plus = True
-telegram_api_url = "https://api.telegram.org/bot1856792170:AAFWhmxfVsHEpaSlaQlXKj6adNHPK54GG5Q/sendMessage?chat_id=@__group_id__&text="
+telegram_api_url = "https://api.telegram.org/bot1856792170:AAFWhmxfVsHEpaSlaQlXKj6adNHPK54GG5Q/sendMessage?chat_id=@__group_id__&parse_mode=HTML&text="
 telegram_group_id = "odisha_vovaxine_18_plus"
 last_message = ""
 
@@ -65,13 +65,13 @@ def extract_availability_data(response):
 
 
 def build_message(center, session):
-    return "{} ,{} , {} " \
-           "\nAge: {} " \
-           "\n{} " \
-           "\n{}" \
-           "\n{}" \
-           "\nQuantity {} [D1:{} ,D2:{}] \n \n " \
-           "...." \
+    return "📍{} ,{} , {}📍" \
+           "\n<strong>Age: {}</strong>" \
+           "\n💉💉💉<b>{}</b>" \
+           ",<code>{}</code>" \
+           "\n📅<b><u>{}</u></b>" \
+           "\n<strong>Quantity {}<code>[D1:{},D2:{}]</code></strong> \n \n " \
+           "..............." \
            "\n " \
         .format(center["name"]
                 , center["district_name"]
