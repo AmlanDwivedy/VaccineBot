@@ -10,12 +10,12 @@ today_date = now.strftime("%d-%m-%Y")
 all_districts_odisha = [445, 448, 447, 472, 454, 468, 457, 473, 458, 467, 449, 459, 460, 474, 464, 450, 461, 455, 446,
                         451, 469, 456, 470, 462, 465, 463, 471, 452, 466, 453]
 is_for_eighteen_plus = True
-# telegram_api_url = "https://api.telegram.org/bot1853183766:AAGzzexG-1c_use4m0G_9IrV0B9Lq53Bkx0/sendMessage?chat_id=@__group_id__&parse_mode=HTML&text="
-# telegram_group_id = "odisha_covishild_18_plus"
+telegram_api_url = "https://api.telegram.org/bot1853183766:AAGzzexG-1c_use4m0G_9IrV0B9Lq53Bkx0/sendMessage?chat_id=@__group_id__&parse_mode=HTML&text="
+telegram_group_id = "odisha_covishild_18_plus"
 
 # DEV
-telegram_api_url = "https://api.telegram.org/bot1832543686:AAFgdgcpIOkNeIBWe07jxwVG5uNW1FJX5N4/sendMessage?chat_id=@__group_id__&parse_mode=HTML&text="
-telegram_group_id = "bbsr_ctc_dkl_angl_covid"
+# telegram_api_url = "https://api.telegram.org/bot1832543686:AAFgdgcpIOkNeIBWe07jxwVG5uNW1FJX5N4/sendMessage?chat_id=@__group_id__&parse_mode=HTML&text="
+# telegram_group_id = "bbsr_ctc_dkl_angl_covid"
 # Dev Ends here
 
 last_message = ""

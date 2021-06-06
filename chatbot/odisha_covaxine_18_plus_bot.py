@@ -6,12 +6,22 @@ import time
 BASE_COWIN_URL = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict"
 now = datetime.now()
 today_date = now.strftime("%d-%m-%Y")
-odisha_khurda_cuttack_angul_dkl_ids = [446, 457, 445, 458]
+# all_districts_odisha = [446, 457, 445, 458]
+all_districts_odisha = [445, 448, 447, 472, 454, 468, 457, 473, 458, 467, 449, 459, 460, 474, 464, 450, 461, 455, 446,
+                        451, 469, 456, 470, 462, 465, 463, 471, 452, 466, 453]
 is_for_eighteen_plus = True
+
 telegram_api_url = "https://api.telegram.org/bot1856792170:AAFWhmxfVsHEpaSlaQlXKj6adNHPK54GG5Q/sendMessage?chat_id=@__group_id__&parse_mode=HTML&text="
 telegram_group_id = "odisha_vovaxine_18_plus"
+
+# DEV
+# telegram_api_url = "https://api.telegram.org/bot1832543686:AAFgdgcpIOkNeIBWe07jxwVG5uNW1FJX5N4/sendMessage?chat_id=@__group_id__&parse_mode=HTML&text="
+# telegram_group_id = "bbsr_ctc_dkl_angl_covid"
+# Dev Ends here
+
+
 last_message = ""
-last_send_messages = [None] * len(odisha_khurda_cuttack_angul_dkl_ids)
+last_send_messages = [None] * len(all_districts_odisha)
 
 
 def fetch_data_from_cowin(district_id, index):
@@ -27,7 +37,7 @@ def fetch_data_from_cowin(district_id, index):
 
 
 def fetch_data_for_me():
-    for index, district_id in enumerate(odisha_khurda_cuttack_angul_dkl_ids):
+    for index, district_id in enumerate(all_districts_odisha):
         fetch_data_from_cowin(district_id, index)
 
 
@@ -78,6 +88,12 @@ def build_message(center, session):
     date_time_string = session["date"]
     date_time_obj = datetime.strptime(date_time_string, "%d-%m-%Y")
     date_text = date_time_obj.strftime("%d %b, %Y")
+
+    forty_five_plus = "4️⃣5️⃣➕"
+    eighteen_plus = "1️⃣8️⃣➕"
+    age = session["min_age_limit"]
+    age_text = eighteen_plus if age == 18 else forty_five_plus
+
     text = "District+: <b>{}</b>\n" \
            "Age:<b>{}</b>\n" \
            "Pincode:<b>{}</b>\n" \
@@ -89,7 +105,7 @@ def build_message(center, session):
            "\n<strong>Total {} Slots <code>[1st Dosage:{},2nd Dosage:{}]</code></strong>" \
            "\n\n" \
         .format(center["district_name"],
-                session["min_age_limit"],
+                age_text,
                 center["pincode"],
                 center["name"] + ", " + center["address"],
                 date_text,
