@@ -7,23 +7,17 @@ BASE_COWIN_URL = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/c
 DISTRICTS_URL = "https://cdn-api.co-vin.in/api/v2/admin/location/districts"
 now = datetime.now()
 today_date = now.strftime("%d-%m-%Y")
-# all_odisha_districts=[446, 457, 445, 458]
-all_odisha_districts=[269]
-# all_odisha_districts = [445, 448, 447, 472, 454, 468, 457, 473, 458, 467, 449, 459, 460, 474, 464, 450, 461, 455, 446,
-#                         451, 469, 456, 470, 462, 465, 463, 471, 452, 466, 453]
-is_for_eighteen_plus = False
+# Dakhin Kannada
+districts = [269]
+is_for_eighteen_plus = True
 is_for_second_dosage = False
-telegram_api_url = "https://api.telegram.org/bot1832543686:AAFgdgcpIOkNeIBWe07jxwVG5uNW1FJX5N4/sendMessage?chat_id=@__group_id__&parse_mode=HTML&text="
-telegram_group_id = "bbsr_ctc_dkl_angl_covid"
-# dev starts
-# telegram_api_url = "https://api.telegram.org/bot1853183766:AAGzzexG-1c_use4m0G_9IrV0B9Lq53Bkx0/sendMessage?chat_id=@__group_id__&parse_mode=HTML&text="
-# telegram_group_id = "odisha_covishild_18_plus"
-# dev ends here
+telegram_api_url = "https://api.telegram.org/bot1826131200:AAHA1wqADMaCHRqGUArhzzIb9_HBpVysahk/sendMessage?chat_id=@__group_id__&parse_mode=HTML&text="
+telegram_group_id = "Mangalore_Vaccine_Slot_Notifier"
 last_message = ""
 all_districts = [None] * 100
 
-last_send_messages = [None] * len(all_odisha_districts)
-district_vs_stock = [None] * len(all_odisha_districts)
+last_send_messages = [None] * len(districts)
+district_vs_stock = [None] * len(districts)
 
 
 def fetch_data_from_cowin(index, district_id):
@@ -39,15 +33,13 @@ def fetch_data_from_cowin(index, district_id):
 
 
 def fetch_data_for_me():
-    for index, district_id in enumerate(all_odisha_districts):
+    for index, district_id in enumerate(districts):
         fetch_data_from_cowin(index, district_id)
 
 
 def extract_availability_data(response, index, district_id):
     response_json = response.json()
     message = ""
-
-    total_slots = 0
 
     for center in response_json["centers"]:
         for session in center["sessions"]:
@@ -56,14 +48,11 @@ def extract_availability_data(response, index, district_id):
                     print(center["center_id"], center["name"])
                     print("Available Dosage {}".format(session["available_capacity_dose1"]) + " For Age {}".format(
                         session["min_age_limit"]))
-                    total_slots = session["available_capacity"]
                     message += build_message(center, session)
             else:
                 if session["min_age_limit"] > 18 and session["available_capacity_dose1"] > 0:
                     message += build_message(center, session)
 
-
-    # print(message)
     global last_message
     last_message = last_send_messages[index]
     if last_message != message:
@@ -121,50 +110,10 @@ def build_message(center, session):
 
 
 def send_telegram_message(message):
-    # if True:
-    #     return
     final_telegram_url = telegram_api_url.replace("__group_id__", telegram_group_id)
     final_telegram_url_with_message = final_telegram_url + message
     response = requests.get(final_telegram_url_with_message)
     print(response.text)
-
-
-def fetchDistrits(state_id):
-    json_string = {
-        "districts": [{"district_id": 445, "district_name": "Angul"},
-                      {"district_id": 448, "district_name": "Balangir"},
-                      {"district_id": 447, "district_name": "Balasore"},
-                      {"district_id": 472, "district_name": "Bargarh"},
-                      {"district_id": 454, "district_name": "Bhadrak"},
-                      {"district_id": 468, "district_name": "Boudh"},
-                      {"district_id": 457, "district_name": "Cuttack"},
-                      {"district_id": 473, "district_name": "Deogarh"},
-                      {"district_id": 458, "district_name": "Dhenkanal"},
-                      {"district_id": 467, "district_name": "Gajapati"},
-                      {"district_id": 449, "district_name": "Ganjam"},
-                      {"district_id": 459, "district_name": "Jagatsinghpur"},
-                      {"district_id": 460, "district_name": "Jajpur"},
-                      {"district_id": 474, "district_name": "Jharsuguda"},
-                      {"district_id": 464, "district_name": "Kalahandi"},
-                      {"district_id": 450, "district_name": "Kandhamal"},
-                      {"district_id": 461, "district_name": "Kendrapara"},
-                      {"district_id": 455, "district_name": "Kendujhar"},
-                      {"district_id": 446, "district_name": "Khurda"},
-                      {"district_id": 451, "district_name": "Koraput"},
-                      {"district_id": 469, "district_name": "Malkangiri"},
-                      {"district_id": 456, "district_name": "Mayurbhanj"},
-                      {"district_id": 470, "district_name": "Nabarangpur"},
-                      {"district_id": 462, "district_name": "Nayagarh"},
-                      {"district_id": 465, "district_name": "Nuapada"},
-                      {"district_id": 463, "district_name": "Puri"},
-                      {"district_id": 471, "district_name": "Rayagada"},
-                      {"district_id": 452, "district_name": "Sambalpur"},
-                      {"district_id": 466, "district_name": "Subarnapur"},
-                      {"district_id": 453, "district_name": "Sundargarh"}]}
-    for districts in json_string.values():
-        for i, district in enumerate(districts):
-            all_districts[i] = district["district_id"]
-            fetch_data_from_cowin(index=i, district_id=district["district_id"])
 
 
 if __name__ == "__main__":
