@@ -7,12 +7,12 @@ BASE_COWIN_URL = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/c
 DISTRICTS_URL = "https://cdn-api.co-vin.in/api/v2/admin/location/districts"
 now = datetime.now()
 today_date = now.strftime("%d-%m-%Y")
-# all_odisha_districts=[446, 457, 445, 458]
-all_odisha_districts=[269]
+all_odisha_districts = [446, 457, 445]
+# 446 Khurda 457 Cuttack 458 Dhenkanal 571 Angul
 # all_odisha_districts = [445, 448, 447, 472, 454, 468, 457, 473, 458, 467, 449, 459, 460, 474, 464, 450, 461, 455, 446,
 #                         451, 469, 456, 470, 462, 465, 463, 471, 452, 466, 453]
-is_for_eighteen_plus = False
-is_for_second_dosage = False
+is_for_eighteen_plus = True
+is_for_second_dosage = True
 telegram_api_url = "https://api.telegram.org/bot1832543686:AAFgdgcpIOkNeIBWe07jxwVG5uNW1FJX5N4/sendMessage?chat_id=@__group_id__&parse_mode=HTML&text="
 telegram_group_id = "bbsr_ctc_dkl_angl_covid"
 # dev starts
@@ -61,7 +61,6 @@ def extract_availability_data(response, index, district_id):
             else:
                 if session["min_age_limit"] > 18 and session["available_capacity_dose1"] > 0:
                     message += build_message(center, session)
-
 
     # print(message)
     global last_message
